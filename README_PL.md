@@ -1,17 +1,40 @@
-# AutoCloseCommand — Minecraft 26.3 (Fabric)
+# AutoCloseCommand V6 — Minecraft 26.3 (Fabric)
 
-## Co robi mod
+## Funkcje
 
-- Jest modem wyłącznie klienckim.
-- Domyślnie jest włączony od razu po uruchomieniu Minecrafta.
-- Wykrywa konkretne okno o układzie 54 slotów u góry + 36 slotów ekwipunku gracza (łącznie 90 slotów).
-- Rozpoznawanie opiera się wyłącznie na liczbie slotów — mod nie sprawdza kolorów, typów, nazw ani pozycji przedmiotów, więc mogą się one zmieniać i przestawiać.
-- Zamyka takie okno przez jego standardową procedurę zamykania (jak Escape), odczekuje 2 ticki gry i dopiero potem wysyła na serwer komendę `autoclicker`. Opóźnienie zapobiega wyścigowi między zamknięciem kontenera a wysłaniem komendy.
-- Wysyła komendę tylko raz na jedno otwarcie okna, a nie 20 razy na sekundę.
-- Zwykły ekwipunek gracza (klawisz E) nie jest traktowany jako okno docelowe.
-- **F8** włącza lub wyłącza automat. Stan przełącznika jest resetowany do „włączony” po ponownym uruchomieniu gry.
+- Mod wyłącznie kliencki.
+- **F8** włącza/wyłącza oryginalną funkcję AutoCloseCommand.
+- Oryginalna funkcja wykrywa osobny ekran kontenera mający dokładnie 90 slotów (54 sloty menu + 36 slotów ekwipunku gracza), zamyka go standardową procedurą, czeka 2 ticki i wysyła `/autoclicker`.
+- Komenda `/autoclicker` jest wysyłana tylko raz na jedno otwarcie pasującego okna.
+- **F7** niezależnie włącza/wyłącza AutoSell, które cyklicznie wysyła `/sellall`.
+- AutoSell jest domyślnie wyłączony. Jego stan jest zapamiętywany po restarcie gry.
+- F7 i F8 działają niezależnie: wyłączenie jednej funkcji nie wyłącza drugiej.
 
-Komenda jest wysyłana bezpośrednio jako komenda czatu Minecrafta. Nie pojawia się na ekranie otwarte pole wpisywania czatu, ale serwer otrzymuje tę samą komendę.
+## Ustawianie odstępu AutoSell
+
+Po pierwszym uruchomieniu moda utworzy plik:
+
+```text
+config/autoclosecommand.properties
+```
+
+W nim można zmienić:
+
+```properties
+autoSellEnabled=false
+autoSellIntervalSeconds=60
+```
+
+`autoSellIntervalSeconds` określa odstęp między komendami w sekundach. Dozwolone wartości to 1–86400. Po zmianie ustawień w pliku uruchom ponownie grę. Wartość `autoSellEnabled` jest również zapisywana automatycznie po użyciu F7.
+
+Po włączeniu AutoSell klawiszem F7 pierwsza komenda zostanie wysłana dopiero po upływie pełnego ustawionego odstępu. Komendy są wysyłane tylko wtedy, gdy gracz jest połączony z serwerem.
+
+## Klawisze
+
+- **F7** — AutoSell `/sellall`.
+- **F8** — oryginalny AutoCloseCommand + `/autoclicker`.
+
+Klawisze można zmienić w Ustawienia → Sterowanie → Przypisanie klawiszy.
 
 ## Wymagania
 
@@ -19,26 +42,16 @@ Komenda jest wysyłana bezpośrednio jako komenda czatu Minecrafta. Nie pojawia 
 - Fabric Loader **0.20.1** lub nowszy
 - Fabric API **0.166.2+26.3**
 - Java **25**
+- Gradle **9.9.1** lub nowszy zgodny z Fabric Loom
 
-## Budowanie pliku JAR w Windows
+## Budowanie JAR w Windows
 
-1. Zainstaluj JDK 25.
-2. Zainstaluj Gradle 9.7.1 lub nowszy zgodny z Fabric Loom dla Minecrafta 26.3 (np. 9.9.1).
-3. Otwórz terminal w folderze tego projektu.
-4. Najprościej uruchom `build.bat` dwukrotnym kliknięciem. Skrypt korzysta z JDK wskazanego przez `JAVA_HOME` i wyłącza konfigurację cache Gradle dla zgodności z konfiguracją projektu. Możesz też uruchomić w terminalu:
-
-   ```powershell
-   gradle build --no-configuration-cache
-   ```
-
-5. Gotowy mod będzie w:
-
-   ```text
-   build\libs\autoclosecommand-1.0.0.jar
-   ```
-
-6. Włóż plik JAR do folderu `mods` profilu Fabric w launcherze. Upewnij się, że w tym profilu jest też Fabric API.
+1. Zainstaluj JDK 25 i Gradle 9.9.1 lub nowszy.
+2. Upewnij się, że `JAVA_HOME` wskazuje JDK 25, a polecenie `gradle` działa w terminalu.
+3. Uruchom `build.bat` w głównym folderze projektu.
+4. Gotowy plik znajdziesz w `build\libs\autoclosecommand-1.1.0.jar`.
+5. Włóż JAR do folderu `mods` swojej instancji Minecrafta. Fabric API musi być zainstalowane w tej instancji.
 
 ## Ważne
 
-Mod zareaguje tylko na niestandardowe okno będące ekranem kontenera Minecrafta z dokładnie 90 slotami łącznie (54 u góry + 36 ekwipunku gracza). Jeśli serwer używa innej liczby slotów albo całkowicie niestandardowego ekranu, trzeba będzie dostosować wykrywanie.
+AutoCloseCommand reaguje tylko na ekran kontenera Minecrafta z dokładnie 90 slotami łącznie. Nie analizuje typów, kolorów, nazw ani pozycji przedmiotów.
