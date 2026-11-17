@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-rem Prefer the configured JDK (Java 25) over older Java versions on PATH.
+rem Prefer configured JDK 25.
 if defined JAVA_HOME set "PATH=%JAVA_HOME%\bin;%PATH%"
 
 where java >nul 2>nul
@@ -19,7 +19,7 @@ if errorlevel 1 (
   exit /b 1
 )
 
-echo Budowanie AutoCloseCommand...
+echo Budowanie AutoCloseCommand V6...
 gradle build --no-configuration-cache
 if errorlevel 1 (
   echo.
@@ -29,5 +29,5 @@ if errorlevel 1 (
 )
 
 echo.
-echo GOTOWE: build\libs\autoclosecommand-1.0.0.jar
+echo GOTOWE: build\libs\autoclosecommand-1.1.0.jar
 pause
